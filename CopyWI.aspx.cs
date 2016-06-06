@@ -34,6 +34,8 @@ public partial class CopyWI : WIBase {
    
     string Action = "";
     public string Dict;
+
+
     public string MappingXml {
         get {
             if (this.Session["MappingXml"] == null)
