@@ -20,6 +20,8 @@ body {font-family:Arial;}
     <input type="button" onclick="on_Submit(this)"  value="Save" /> 
     <td><input type="button" onclick="on_Cancel(this)"  value="Cancel" /> 
 </form>
+
+
 </body>
 </html>
 <script>
