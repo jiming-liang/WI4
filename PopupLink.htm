@@ -1,0 +1,182 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>
+        Associated Links&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </title>
+    <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="WI.js"></script>
+    <script type="text/javascript" language="javascript">
+        var theForm = document.forms['form1']
+        var WiType = getParameterByName('WiType').toUpperCase()
+        var Id = getParameterByName('Id')
+        var Type = ''
+        $(document).ready(function () {
+            var xml = window.dialogArguments
+            if (WiType != 'WIT')
+                Type = 'Local'
+            var s=''
+            xml = '<r>' + xml + '</r>'
+            $($.parseXML(xml)).find('WILink').each(function (index, element) {
+                var src = $(this)
+                var type = src.attr('type')
+                var disabled = 'disabled'
+                if (src.attr('type') == Type)
+                    disabled = ''
+                var title = src.attr('title')
+                var link = src.attr('link')
+                link = MyReplace(link, '@!123', '&')
+                console.log(title + ' ' + link)
+                s += '<tr><td style="width:15%"><input '+disabled+' type=button onclick=on_Delete(this) value=Delete />'
+                s += '<td style="width:30%"><input ' + disabled + ' type=text value="' + title + '" style="width:99%" />'
+                s += '<td style="width:55%"><input ' + disabled + ' type=text value="' + link + '" style="width:99%"/>'
+            });
+            $(s).appendTo(myTable)
+            //$($.parseXML(xml)).find('r').each(function (index, element) {
+            //    var s = ''
+            //    $(this).children().each(function () {
+            //        var src = $(this)
+            //        var title = src.attr('title')
+            //        var link = src.attr('link')
+            //        link=MyReplace(link, '@!123', '&')
+            //        console.log(title + ' ' + link)
+            //        s += '<tr><td style="width:15%"><input type=button onclick=on_Delete(this) value=Delete /></td><td style="width:30%"><input type=text value="' + title + '" style="width:99%" /></td><td style="width:55%"><input type=text value="' + link + '" style="width:99%"/></td></tr>'
+            //    })
+
+            //    $(s).appendTo(myTable)
+            //});
+            Format();
+        })
+        function Format() {
+            $('input:text').each(function () {
+                var src = $(this)
+                //  src.width(src.parent().width())
+            })
+        }
+        function on_Add() {
+            var arr = [];
+            var ret = validateInput(arr, "add");
+            if (ret == false) {
+                return;
+            }
+            var s = '<tr><td style="width:15%"><input type=button onclick=on_Delete(this) value=Delete /></td><td style="width:30%"><input type=text style="width:99%"/></td><td style="width:55%"><input type=text style="width:99%"/></td></tr>';
+            var src = $(s);
+            src.appendTo(myTable);
+            Format();
+        }
+        function on_Delete(src0) {
+            var src = $(src0)
+            var tr = src.parent().parent()
+            tr.remove()
+        }
+        function on_Save() {
+            var arr = []
+
+            if (validateInput(arr, "save")) {
+                window.returnValue = arr;
+                window.close();
+            }
+        }
+        function on_Cancel() {
+            window.close()
+            return
+        }
+        /*
+            Mkae sure all input are not empty and correct
+        */
+        function validateInput(arr, action) {
+            var isValid = true;
+            var index = 0
+            var totalRow = $('td:nth-child(1)', myTable).length;
+
+            $('td:nth-child(3)', myTable).each(function () {
+                var src = $(this);
+                if (src.find('input').length == 0) { // header
+                    index++;
+                    return true; // continue
+                }
+                var type = 'Local'
+                if (Type == '' || src.find('input').eq(0).prop('disabled'))
+                    type = ''
+                var ctrlTitle = src.prev().find('input').eq(0);
+                var title = src.prev().find('input').eq(0).val();
+                title = $.trim(title);
+                var ctrlLink = src.find('input').eq(0);
+                var link = src.find('input').eq(0).val();
+                link = $.trim(link);
+
+                // Save button click and Last insert row empty - skip it
+                if ((action == 'save') && (index == totalRow - 1) &&
+                    (title == '') && (link == '')) {
+                    return true; // continue
+                }
+                if (title == '') {
+                    alert('Please enter a Text to Display');
+                    ctrlTitle.focus();
+                    isValid = false;
+                    return false; // break
+                }
+                if (link == '') {
+                    alert('Please enter an address.');
+                    ctrlLink.focus();
+                    isValid = false;
+                    return false;
+                }
+                validateAndCorrectURL(ctrlLink)
+                //if (!validateAndCorrectURL(ctrlLink)) {
+                //    alert('Invalid url ' + link)
+                //    ctrlLink.focus();
+                //    isValid = false;
+                //    return false;
+                //}
+                arr.push({ title: title, link: ctrlLink.val() , type:type});
+                index++;
+            });
+            return isValid;
+        }
+        function validateAndCorrectURL(ctrlLink) {
+            var address = ctrlLink.val();
+            if ((address.indexOf('https') == 0) ||
+                (address.indexOf('http') == 0) ||
+                (address.indexOf('ftp') == 0)) {
+            }
+            else {
+                address = 'http://' + address;
+                ctrlLink.val(address);
+            }
+            //var urlregex = new RegExp(
+            //"^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|localhost|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&amp;%\$#\=~_\-]+))*$");
+            //return urlregex.test(address);
+        }
+
+    </script>
+</head>
+<body>
+    <center>
+        <br /><br /><br />
+        <table id=myTable border="1" width="80%" style="border-collapse:collapse;" cellpadding="4">
+            <tr>
+                <td style="width:15%"></td>
+                <td style="width:30%">
+                    <p style="margin-top:0px;margin-bottom:0px">
+                        <strong>
+                            <font face="Arial" size="2">Text to Display</font>
+                        </strong>
+                    </p>
+                </td>
+                <td style="width:55%">
+                    <p style="margin-top:0px;margin-bottom:0px">
+                        <strong>
+                            <font face="Arial" size="2">Address (Copy and paste link)</font>
+                        </strong>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <input type="button" onclick="on_Add()" value="Insert" />
+        <input type="button" onclick="on_Save()" value="Save" />
+        <input type="button" onclick="on_Cancel()" value="Cancel" />
+    </center>
+</body>
+</html>

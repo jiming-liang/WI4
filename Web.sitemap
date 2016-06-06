@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+    <siteMapNode url="Home.aspx" title="Home"  description="Home Page">
+        <siteMapNode url="Mapping.aspx" title="Create Work Instruction Template"  description="Create Work Instruction" />
+        <siteMapNode url="Search.aspx" title="Work Instruction Template Library"  description="Work Instruction Template Library">
+          <siteMapNode url="Create.aspx" title="Work Instruction Template"  description="Work Instruction "></siteMapNode>
+        </siteMapNode>
+        <siteMapNode url="Admin.aspx" title="Admin"  description="Admin Page" />
+        <siteMapNode url="Users.aspx" title="Users Management"  description="Users Management" />
+        <siteMapNode url="WiByRig.aspx" title="Report by Rig"  description="WiByRig Page" />
+        <siteMapNode url="Report.aspx" title="Report"  description="Report Page" />
+        <siteMapNode url="Status.aspx" title="Work Instruction Status Report"  description="Work Instruction Status Report" />
+        <siteMapNode url="feedback.aspx" title="Feedback"  description="Feedback Report" />
+        <siteMapNode url="STG.aspx" title="STG Report"  description="STG Page" />
+    </siteMapNode>
+</siteMap>

@@ -1,0 +1,92 @@
+﻿
+    <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="jquery-1.10.2.js"></script>
+<script type="text/javascript" src="wi.js"></script>
+<iframe id="f" width="800" height="800" onreadystatechange="on_Readystatechange(this)"></iframe>
+        <input type="button" />
+<div ></div>
+<script>
+    var count = 0
+    var f = $('#f')
+    var url = 'http://wims-dev.enscoplc.com/wi/Create.aspx?id=309&action=preview&rig=ensco 100'
+    url = 'http://wims.enscoplc.com/wi/create.aspx?id=551&action=preview&rig=ensco ds-7'
+    url = 'http://localhost/wi3/Create.aspx?id=277&action=preview&rig=ensco 100'
+    $(document).ready(function () {
+       Test(); return;
+        Start()
+
+})
+function Start() {
+    setTimeout(function () {
+        count = 0
+        f.attr('src', url)
+        Start();
+    }, 2000);
+}
+function Test() {
+    count = 0
+    f.attr('src', url)
+}
+function on_Readystatechange(src0) {
+    count++;
+   // alert()
+    if (count!=3) return 
+    //if (document.readyState !='complete') return
+    var html ='' //= $('#f').contentWindow.document.body.innerHTML //.contents().find("html").html();
+    var all = document.getElementById('f').contentWindow.document.all
+
+    for (var i = 0; i < all.length; i++)
+        if (all[i].innerHTML.trim()!='')
+            html+='<br>'+ all[i].localName+'<br>'+ all[i].outerHTML
+    if (html.toLowerCase().indexOf('error') == -1)
+        return
+    //html = $(html).find('code').eq(0).text()
+    // html = html.replace(/'/g, '?');
+    html = MyReplace(html, '\'', '"')
+    //html = MyReplace(html, '\"', '')
+    //html = MyReplace(html, '\>', '')
+    //html = MyReplace(html, '\<', '')
+    //html = MyReplace(html, '\"', '')
+    //html = MyReplace(html, '\/', '')
+    html =html.replace(/\\/g, '_')
+    $('div').text(html)
+    var sql = "insert tbl_log select getdate(), '" + html + "'"
+
+    CallAjaxDev('sql', sql, 'runSql', function (data, status, xhr) {
+    }, function (e) {
+        alert(e.responseText);
+        //alert(sql)
+    }
+        )
+}
+var CallAjaxDev = function (name, value, method, fn1, fn2, sync) {
+    value = escapeXml(value)
+   // alert(value)
+    var parameters = "{'" + name + "':'" + value + "'}"
+    var async = sync || 'true'
+    $.ajax({
+        type: 'POST',
+        async: async,
+        url: GetSiteUrl() + '/webservice.asmx/' + method,
+        data: parameters,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: fn1,
+        error: fn2
+    });
+}
+function GetSiteUrl() {
+    // alert(window.location.protocol)
+    var url = window.location.toString()
+    var arr = url.split('/')
+
+    var sPort = window.location.port
+    if ((sPort.length > 0) && (window.location.toString().indexOf("localhost:" + sPort) > 0)) {
+        url = 'http://' + arr[2]
+    }
+    else {
+        url = 'http://' + arr[2] + '/' + arr[3]
+    }
+    return url
+}
+</script>

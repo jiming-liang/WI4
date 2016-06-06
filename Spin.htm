@@ -1,0 +1,13 @@
+﻿<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="js/spin.min.js"></script>
+<script type="text/javascript" src="wi.js"></script>
+
+
+<div id="div1"> </div>
+<script>
+    $(document).ready(function () {
+        var spinner = new Spinner().spin()
+        $('#div1').append(spinner.el)
+        //$('#f1').contents().find('body').append(spinner.el)
+    })
+</script>

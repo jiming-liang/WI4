@@ -1,0 +1,28 @@
+﻿
+<html>
+<head>
+    <title>
+        Desk Canvas Test
+    </title>
+    <style media="screen" type="text/css">
+        #context {
+            background-color: oldlace;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include the Desk Canvas library, hosted on a CDN for your convenience -->
+    <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+    <script>
+        $(document).ready(function () {
+            var s = $('div', window.parent.document).filter(function () {
+                return $(this).text() === 'EmpId'
+            }).next().text()
+      
+            alert(s)
+        })
+    </script>
+    <h3 id="greeting"></h3>
+    <pre id="context"></pre>
+</body>
+</html>

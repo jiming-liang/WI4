@@ -1,0 +1,426 @@
+﻿<html lang="en" dir="ltr">
+<head>
+    <!--
+    * ***************************************************************
+    *  This software and related documentation are provided under a
+    *  license agreement containing restrictions on use and
+    *  disclosure and are protected by intellectual property
+    *  laws. Except as expressly permitted in your license agreement
+    *  or allowed by law, you may not use, copy, reproduce,
+    *  translate, broadcast, modify, license, transmit, distribute,
+    *  exhibit, perform, publish or display any part, in any form or
+    *  by any means. Reverse engineering, disassembly, or
+    *  decompilation of this software, unless required by law for
+    *  interoperability, is prohibited.
+    *  The information contained herein is subject to change without
+    *  notice and is not warranted to be error-free. If you find any
+    *  errors, please report them to us in writing.
+    *
+    *  Copyright (C) 1988, 2011, Oracle and/or its affiliates.
+    *  All Rights Reserved.
+    * ***************************************************************
+    -->
+    <!--Piyush Sisodia 6/19/2013 IMS17936 Modified image size and removed copyright
+    <!--Begin IMS17936 -->
+    <!--Below is the code that has been modified. Since it can't be commented in between have to move it up
+    <!-- src="/hrprd/images/OPSE_logo.gif" alt="Oracle PeopleSoft logo" width="322" height="96"></td>
+    -->
+    <!--End IMS17936 -->
+    <!--Piyush Sisodia 1/26/2013 IMS19874 Modified Code hide browser message for OS
+    <!--Begin IMS19874 -->
+    <!--Below is the code that has been commented out. Since it can't be commented in between have to move it up
+    <!--<div class="psloginerror" id="browsercheck_error" style="text-align:left">We've detected that your browser version is not supported by this website. You can continue to use it; however many of the newer features might not work as expected. For best results, use one of the following browsers:</div><a href='http://www.microsoft.com/windows/internet-explorer/default.aspx' target='_blank'><img src='/hrprd/images/PTBROWSER_IE.gif' border='0' alt='MSIE'</a><a href='http://www.microsoft.com/windows/internet-explorer/default.aspx' target='_blank'>Internet Explorer</a><span class='PAPAGETITLE'> (Version 8.0 and above)</span><br><a href='http://www.mozilla.com/' target='_blank'><img src='/hrprd/images/PTBROWSER_FF.gif' border='0' alt='FIREFOX'</a><a href='http://www.mozilla.com/' target='_blank'>Mozilla Firefox</a><span class='PAPAGETITLE'> (Version 3.6 and above)</span><br><a href='http://www.google.com/chrome/' target='_blank'><img src='/hrprd/images/PTBROWSER_CR.gif' border='0' alt='CHROME'</a><a href='http://www.google.com/chrome/' target='_blank'>Google Chrome</a><span class='PAPAGETITLE'> (Version 12.0 and above)</span><br><br></div>-->
+    <!--End IMS19874 -->
+    <!--
+    *
+    -->
+    <title>Oracle | PeopleSoft Enterprise Sign-in</title>
+    <script type="text/javascript">
+if (self === top) {
+    var fb = document.getElementById("ptfb");
+    fb.parentNode.removeChild(fb);
+} else {
+    try {
+        top.location = self.location;
+    } catch(ex) {}
+}
+    </script>
+    <link href="/hrprd/styles.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        <!--
+        a:link {
+            color: #48598c;
+        }
+
+        a:visited {
+            color: #48598C;
+        }
+
+        a:hover {
+            color: #48598C;
+        }
+
+        a:active {
+            color: #48598C;
+        }
+
+        body {
+            margin-left: 0px;
+            margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+        }
+        -->
+        window.history.forward(1);
+    </style>
+    <script language="JavaScript">
+function signin(form)
+    {
+    var docLoc=new String(document.location);
+    var iLast= docLoc.lastIndexOf("?&");
+    if (docLoc.length == (iLast+2))
+        {
+        docLoc = docLoc.substring(0, iLast);
+        }
+
+    if (docLoc.indexOf("?cmd=")==-1 && docLoc.indexOf("?")!=-1)
+        {
+        if (docLoc.indexOf("&cmd=login")==-1)
+            {
+            var i=docLoc.length - 1;
+            var j= docLoc.lastIndexOf("&");
+            if (j!=-1 && i==j)
+                form.action=docLoc+form.action.substring(form.action.indexOf("?")+1,form.action.length);
+            else
+                form.action=docLoc+"&"+form.action.substring(form.action.indexOf("?")+1,form.action.length);
+            }
+        else
+            form.action=docLoc.substring(0,docLoc.indexOf("&cmd=login"))+"&cmd=login"+docLoc.substring(docLoc.indexOf("&languageCd="),docLoc.length);
+        }
+
+    var now=new Date();
+    form.timezoneOffset.value=now.getTimezoneOffset();
+    return ;
+    }
+
+
+
+function include(url)
+	{
+	var xmlhttp=false;
+
+	/*@cc_on @*/
+	/*@if (@_jscript_version >= 5)
+	// JScript gives us Conditional compilation, we can cope with old IE versions.
+	// and security blocked creation of the objects.
+
+	try {
+	  xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+	  } catch (e) {
+
+	try {
+	  xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	  } catch (E) {
+	  xmlhttp = false;
+	}
+	}
+	@end @*/
+
+
+	if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
+	try {
+	  xmlhttp = new XMLHttpRequest();
+	  } catch (e) {
+	  xmlhttp=false;
+	  }
+	}
+
+	if (!xmlhttp && window.createRequest) {
+	  try {
+	    xmlhttp = window.createRequest();
+	    } catch (e) {
+	    xmlhttp=false;
+	  }
+	}
+
+	xmlhttp.open("HEAD", url, true);
+	xmlhttp.onreadystatechange=function() {
+	if (xmlhttp.readyState==4) {
+
+	//alert("Status is "+xmlhttp.status);
+
+	if (xmlhttp.status==200) {
+	  xmlhttp.open("GET", url ,true);
+	  xmlhttp.onreadystatechange=function() {
+	if (xmlhttp.readyState==4) {
+
+	//alert(xmlhttp.responseText);
+
+
+ 	// var d = new Date()
+	// document.write(d.getDate())
+	//document.write(".")
+	//document.write(d.getMonth() + 1)
+	//document.write(".")
+	//document.write(d.getFullYear())
+
+
+
+	  var s=xmlhttp.responseText
+	  s=s.replace(/\r\n/g, "<br>")
+	  document.getElementById('updateDiv').innerHTML=s
+
+
+	//var updateDiv = document.getElementById('updateDiv');
+	//newParagraph = document.createElement('P');
+
+
+
+	//newText = document.createTextNode(xmlhttp.responseText);
+	//newParagraph.appendChild(newText);
+	//updateDiv.appendChild(newParagraph);
+
+
+
+	  $settings[ 'apply_source_formatting' ] = true;
+
+	  }
+	}
+
+	xmlhttp.send(null)
+	  }
+	 }
+	}
+
+	xmlhttp.send(null)
+	}
+
+
+function setFocus()
+    {
+    try
+        {document.login.userid.focus()}
+    catch (e)
+        {};
+    return;
+    }
+
+function setErrorImg()
+    {
+    var login_error = document.getElementById('login_error').innerHTML;
+    var discovery_error = document.getElementById('discovery_error').innerHTML;
+
+    /*Piyush Sisodia IMS19874  var browsercheck_error = document.getElementById('browsercheck_error').innerHTML;*/
+    var browsercheck_error = "";
+    if (login_error.length != 0 || discovery_error.length != 0 || browsercheck_error.length != 0)
+        {
+        document.getElementById('error_img').style.display = 'block';
+        if (login_error.length != 0)
+            document.getElementById('login_error').style.visibility = 'visible';
+        if (discovery_error.length != 0)
+            document.getElementById('discovery_error').style.visibility = 'visible';
+        document.getElementById('error_link').focus();
+        }
+    else
+        setFocus();
+    }
+
+function clearRecentSearch() {
+    if (typeof(window.sessionStorage) !== "undefined") {
+        try {
+            sessionStorage.clear();
+        } catch (e) {}
+    }
+}
+
+function submitAction(form)
+{
+  
+signin(form);
+form.Submit.disabled=true;
+form.submit();
+    alert()
+}
+
+
+    </script>
+</head>
+<body onload="setErrorImg(); clearRecentSearch(); include('https://people4.ensco.ws:58100/MOTD.txt'); ">
+    <table width="100%" height="99%" border="0" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td height="96" align="center" valign="middle"><img width="317" height="132" alt="Ensco logo" src="/hrprd/images/OPSE_logo.gif"></td>
+            </tr>
+            <tr>
+                <td height="250" align="center" valign="middle">
+                    <table width="590" border="0" cellspacing="0" cellpadding="0">
+                        <tbody>
+                            <tr>
+                                <td width="600" height="318" align="center" valign="top">
+                                    <table width="100%" height="273" border="0" cellspacing="0" cellpadding="0">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td width="50%" height="200" class="psloginframe" valign="middle">
+                                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                        <form name="login" id="login" onsubmit="signin(document.login)" action="https://people4.ensco.ws:58100/psp/hrprd/EMPLOYEE/HRMS/c/ROLE_EMPLOYEE.TL_MSS_EE_SRCH_PRD.GBL?FolderPath=PORTAL_ROOT_OBJECT.CO_EMPLOYEE_SELF_SERVICE.HC_TIME_REPORTING.HC_RECORD_TIME.HC_TL_SS_JOB_SRCH_EE_GBL&amp;IsFolder=false&amp;IgnoreParamTempl=FolderPath%2cIsFolder&amp;cmd=login&amp;languageCd=ENG" method="post" autocomplete="off"></form>
+                                                                        <input name="timezoneOffset" type="hidden" value="360">
+                                                                    </table><div style="text-align: center;">
+                                                                        <h1 id="error_img" style="display: none;"><a tabindex="1" id="error_link" href="javascript:setFocus();"><img alt="Error" src="/hrprd/images/PT_LOGIN_ERROR.gif" border="0"></a></h1>
+                                                                        <h2 class="psloginerror" id="login_error" style="visibility: hidden;"></h2>
+                                                                        <h2 class="psloginerror" id="discovery_error" style="visibility: hidden;"></h2>
+                                                                    </div><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                        <tbody>
+                                                                            <tr>
+
+                                                                                <!--IMS19874 <div class="psloginerror" id="browsercheck_error" style="text-align:left">We've detected that your browser version is not supported by this website. You can continue to use it; however many of the newer features might not work as expected. For best results, use one of the following browsers:</div><a href='http://www.microsoft.com/windows/internet-explorer/default.aspx' target='_blank'><img src='/hrprd/images/PTBROWSER_IE.gif' border='0' alt='MSIE'</a><a href='http://www.microsoft.com/windows/internet-explorer/default.aspx' target='_blank'>Internet Explorer</a><span class='PAPAGETITLE'> (Version 8.0 and above)</span><br><a href='http://www.mozilla.com/' target='_blank'><img src='/hrprd/images/PTBROWSER_FF.gif' border='0' alt='FIREFOX'</a><a href='http://www.mozilla.com/' target='_blank'>Mozilla Firefox</a><span class='PAPAGETITLE'> (Version 3.6 and above)</span><br><a href='http://www.google.com/chrome/' target='_blank'><img src='/hrprd/images/PTBROWSER_CR.gif' border='0' alt='CHROME'</a><a href='http://www.google.com/chrome/' target='_blank'>Google Chrome</a><span class='PAPAGETITLE'> (Version 12.0 and above)</span><br><br></div>-->
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td width="45%" height="25" align="right"><label class="psloginlabel" for="userid">User ID:</label></td>
+                                                                                <td width="1%" height="25">&nbsp;</td>
+                                                                                <td width="54%" height="25"><input name="userid" tabindex="2" class="pslogineditbox" id="userid" type="text" size="15" value=""></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td height="35" align="right"><label class="psloginlabel" for="pwd">Password:</label></td>
+                                                                                <td height="35">&nbsp;</td>
+                                                                                <td height="35"><input name="pwd" tabindex="3" class="pslogineditbox" id="pwd" type="password" size="15"></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td height="35">&nbsp;</td>
+                                                                                <td height="35">&nbsp;</td>
+                                                                                <td height="35"><input name="Submit" tabindex="4" class="psloginbutton" onclick="submitAction(document.login)" type="submit" value="Sign In"></td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                                <td width="50%" align="center" class="pslanguageframe" rowspan="2">
+                                                                    <table width="90%" border="0" cellspacing="0" cellpadding="0">
+                                                                        <tbody>
+                                                                            <tr></tr>
+                                                                            <tr>
+                                                                                <!-- ******************* Begin IMS5204 and IMS5203 ******************** -->
+                                                                                <td>
+                                                                                    <br><font face="Tahoma" size="2"><b>HCM Production System</b></font><br><div id="updateDiv" style="color: rgb(0, 0, 192); font-family: Tahoma; font-size: 10pt;">Scheduled PeopleSoft Maintenance: Thursday February 25, at 5:00 PM CST</div><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                            <tr>
+                                                                                                <td nowrap="">&nbsp;</td>
+                                                                                                <td nowrap="">&nbsp;</td>
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td align="center">&nbsp;</td>
+                                                                                                <td width="125"></td>
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                            <tr>
+                                                                                                <td nowrap="">&nbsp;</td>
+                                                                                                <!-- *******************   <TD align=center>&nbsp;</TD>******************** -->
+                                                                                                <!-----   Begin Greg Blacknall IMS20083 -->
+                                                                                                <!-----   End Greg Blacknall IMS20083 -->
+
+                                                                                            <tr>
+                                                                                                <td nowrap="">&nbsp;</td>
+                                                                                                <td nowrap="">&nbsp;</td>
+                                                                                                <td nowrap="">&nbsp;</td>
+                                                                                                <td nowrap="">&nbsp;</td>
+                                                                                                <td nowrap="">&nbsp;</td>
+                                                                                                <td nowrap="">&nbsp;</td>
+                                                                                            </tr>
+
+                                                                                            <!-----   Begin Greg Blacknall IMS20083 -->
+                                                                                            <!--  <font size="2" face="Tahoma" color="blue"><p>We are currently experiencing performance issues in the PeopleSoft HCM system related to the upgrade to the newest release. We are aware of these issues and are working with our business partners to improve performance and processing time of the system. We thank you for your patience and understanding as we work through these issues.</p></font> -->
+                                                                                            <!--  <font size="2" face="Tahoma" color="blue"><p>The PeopleSoft HCM Support Team</p></font> -->
+                                                                                            <!--   Begin Greg Blacknall IMS20083 -->
+                                                                                            <!-- <td><div align="left"> -->
+                                                                                            <!-- <td><div style="text-align:left"> -->
+                                                                                            <!--   The color #C00000 is red,  #0000c0 is blue -->
+                                                                                            <!-- <div id="updateDiv" style="font-family: Tahoma; font-size: 9pt; color: #C00000;"></div> -->
+                                                                                            <!-- <p></p> -->
+                                                                                            <!-- <p></p> -->
+                                                                                            <!-- Below is error such as CHECK APPSERVER LOGS java.lang.NullPointer -->
+                                                                                            <!-- <p> </p> -->
+                                                                                            <!-- </div></td> -->
+                                                                                            <!--  End Greg Blacknall IMS20083 -->
+
+                                                                                            <tr>
+                                                                                                <td width="100%" colspan="2">
+                                                                                                    <!-----   End Greg Blacknall IMS20083 -->
+
+                                                                                                    <img width="30" height="30" src="/hrprd/images/ensco_stop.jpg" border="0">
+                                                                                                    <font face="Tahoma" size="2">Employees should log in using their Employee ID. If you experience problems logging in, or have not registered with Password Manager, please contact the Help Desk at <b>713-430-HELP (4357)</b>. W5</font>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                            <tr>
+                                                                                <td class="psloginlabel" valign="top">
+                                                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                                <td nowrap="">&nbsp;</td>
+                                                                                                <td nowrap="">&nbsp;</td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td height="80" class="psmessageframe" valign="middle">
+                                                                    <table width="100%" border="0" cellspacing="0" cellpadding="5">
+                                                                        <tbody>
+                                                                            <tr>
+
+                                                                                <!-- <td><div style="text-align:center"><p class="pslogintext"></p></div></td> -->
+
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td valign="bottom">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="5">
+                        <tbody>
+                            <tr>
+                                <td height="30" class="pslogincopyright" valign="bottom" colspan="2">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <!--Begin IMS17936 -->
+                                <!--<td width="50%" valign="bottom" class="pslogincopyright">Copyright &copy; 2000, 2011, Oracle and/or its affiliates. All rights reserved. Oracle is a registered trademark of Oracle Corporation and/or its affiliates. Other names may be trademarks of their respective owners.</td> -->
+                                <td width="50%" class="pslogincopyright" valign="bottom"></td>
+                                <!--End IMS17936 -->
+                                <td width="569">&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,154 @@
+﻿<head>
+    <style>
+    </style>
+    <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="wi.js"></script>
+</head>
+<body >
+    <center>
+        <br /><br /><br />
+        <table id=t border="1" width="80%" style="border-collapse:collapse;" cellpadding="4">
+        </table>
+        <br />
+        <input type="button" onclick="on_Add()" value="Add" />
+        <input type="button" onclick="on_Save()" value="Save" />
+        <input type="button" onclick="window.close();" value="Cancel" />
+    </center>
+</body>
+</html>
+<script>
+    var theForm = document.forms['form1']
+    var t = $('#t')
+    var features = 'dialogWidth:700px;dialogHeight:600px;center:on';
+    var url = 'popup.htm?name=resources'
+    var Dict=[]
+    $(document).ready(function () {
+        var xml = window.dialogArguments
+        xml = '<r>' + xml + '</r>'
+        $($.parseXML(xml)).find('row').each(function (index, element) {
+            var arr = []
+            var xml=''
+            $(this).children('resources').each(function (index, element) {
+                var src = $(this)
+                var field = $(element)
+                //xml += XMLtoString($(this))
+                var other_xml = src.attr('other')
+                if (other_xml!=null)
+                    other_xml = escapeXml(other_xml)
+                xml += '<resources  id="' + src.attr('id') + '" name="'
+                    + src.attr('name') + '" number="' + src.attr('number') + '" other="' + other_xml + '" />'
+
+                if (src.attr('name') == 'Other')
+                    arr.push(src.attr('other') + '(' + src.attr('number') + ')')
+                else
+                    arr.push(src.attr('name')+'('+src.attr('number')+')')
+            })
+            for (var i = 0; i < arr.length; i++)
+                arr[i]=escapeXml(arr[i])
+            var tr = GetTr( xml,  arr)
+            tr.appendTo(t)
+        });        
+        $(document).prop('title','Minimum Personnel Required'+ $(document).prop('title'))
+    })
+
+    function on_Add() {
+        var tr = GetPopup()
+        if (tr == null)
+            return
+        tr.appendTo(t)
+    }
+    function on_Edit(src0) {
+        var td = $(src0).parent()
+        var data = td.attr('xml')
+        data=Dict[td.parent().attr('Key')] 
+        var tr=GetPopup(data)
+        if (tr == null)
+            return 
+        td.parent().replaceWith(tr)
+    }
+    function on_Delete(src0) {
+        $(src0).parent().parent().remove()
+    }
+    function GetPopup(data) {
+        var arr = showModalDialog(url, data, features);
+        if (arr.length ==0)
+            return null
+        var  xml = ''
+        var arr1 = []
+        for (var i = 0; i < arr.length; i++) {
+            var name1 = arr[i].name
+            name1 = escapeXml(name1)
+            var id = arr[i].id
+            var number = arr[i].number
+            var other = arr[i].other
+            var other_xml = other
+            if (other_xml != null)
+                other_xml = escapeXml(other_xml)
+            xml += '<resources  id="' + id + '" name="' + name1 + '" number="' + number + '" other="' + other_xml + '" />'
+            if (other != null)
+                name1 = other
+
+            name1 += '(' + number + ')'
+            name1=escapeXml(name1)
+            arr1.push(name1)
+        }
+        return GetTr(xml, arr1)
+    }
+    function GetTr(xml, arr) {
+        var s = '<tr><td  ><input type=button onclick=on_Edit(this) value=Edit /><input type=button onclick=on_Delete(this) value=Delete /></td>'
+        s += '<td>' + arr.join(' <b>OR</b> ') + '</td></tr>'
+        //alert(s)
+        var tr = $(s)
+       // tr.children('td').eq(0).attr('xml', xml)
+        var Key = guid()
+        tr.attr('Key', Key)
+        Dict[Key] = xml
+        return tr
+    }
+    function on_Save() {
+        var arr = []
+        var arr1=[]
+        var xml='', s=''
+        $('tr', t).each(function (index) {
+            var tr = $(this)            
+            //var value = htmlUnescape(tr.children('td').eq(0).attr('xml'))
+            //value = MyReplace(value, '"', '&amp;quot;')
+            //value = tr.children('td').eq(0).attr('xml')
+            ////value = MyReplace(value, '"', '&amp;quot;')
+            //xml +='<row id="'+index+'" >'+ value+'</row>'
+            xml+='<row id="'+index+'" >'+ Dict[tr.attr('Key') ]+'</row>'
+            arr.push(tr.children('td').eq(1).html())
+        })
+        arr1.xml = xml
+        arr1.text = arr.join(', ')
+        arr1.text = MyReplace(arr1.text, '<b>OR</b>', '/')
+        window.returnValue = arr1;
+        window.close();
+    }
+    function XMLtoString(xmlNode) {
+        var rstr = "";
+        var node = $(xmlNode).get(0);
+
+        rstr = "<" + node.nodeName;
+
+        if (node.attributes.length > 0) {
+            for (var i = 0; i < node.attributes.length; i++) {
+                rstr += " " + node.attributes[i].name + "=\"" + node.attributes[i].value + "\"";
+            }
+        }
+
+        rstr += ">";
+
+        if ($(node).children().length > 0) {
+            $(node).children().each(function () {
+                rstr += XMLtoString($(this));
+            });
+        }
+        else //asume reached the end childnode, then only write the value (not attribute)
+        {
+            rstr += $(node).text();
+        }
+
+        return rstr += "</" + node.nodeName + ">";
+    }
+ </script>

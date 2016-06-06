@@ -1,0 +1,57 @@
+﻿<head>
+    <style>
+        body {
+            padding: 50px;
+            font-size: 10pt;
+            font-family: arial;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        table, select, input {
+            font-size: 10pt;
+            font-family: arial;
+        }
+
+        textarea {
+            background-color: lightgray;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+    </style>
+    <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="WI.js"></script>
+    <script type="text/javascript" src="tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+    <h3 id="PrecautionLabel"></h3>
+        <table id="tblGeneralPrecautions" width="100%" border="0" cellspacing="0" cellpadding="3" style="border-collapse:collapse;">
+            <tr>  <td><textarea rows="20" id="Precaution"></textarea>
+            <tr>
+                <td colspan="1">
+                    &nbsp&nbsp&nbsp<input type="button" id=SaveButton onclick="on_Save()" value="Save" />
+                    &nbsp&nbsp&nbsp<input type="button" id=CancelButton onclick="on_Cancel()" value="Cancel" />
+        </table>
+        <script>
+            var theForm = document.forms['form1']
+            var t, t0, t1
+            $(document).ready(function () {
+                SetupTinyMCE()
+                var arr = window.dialogArguments
+                $('#Precaution').val((arr.html))
+                $('#PrecautionLabel').text((arr.label))
+                $(document).prop('title', arr.label +$(document).prop('title'))
+                InitTinyMCE()
+            })
+            function on_Save() {
+                var arr = []
+                arr.Precaution = tinyMCE.get('Precaution').getContent()
+                window.returnValue = arr;
+                window.close();
+            }
+            function on_Cancel() {
+                window.close()
+            }
+        </script>

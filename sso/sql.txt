@@ -1,0 +1,45 @@
+﻿IF OBJECT_ID('tempdb..#t') IS NOT NULL
+	drop table #t
+;with t as(
+  select top 1 -- j.EFFDT,j.EFFSEQ, c.EFFDT,  
+e.EMPLID [Employee ID]
+,v.NAME 'Employee Name'
+,c.DESCR 'Employee Classification'
+,JOB_DESCR 'Job Description'
+,DEPT_DESCR 'Department Description'
+,LOC_DESCR ' Work Location'
+,jr.ENS_BUS_UNIT+SPACE(100) 'Ensco BU'
+
+, convert(varchar, p.BIRTHDATE, 101) DOB
+, case when i.NATIONAL_ID IS null OR LEN(i.NATIONAL_ID)<4 then '' else RIGHT(NATIONAL_ID, 4) end SSN
+, j.EMPL_STATUS+SPACE(100)  'Employee Status'
+, j.PER_ORG+SPACE(100)  'Employee Type'
+, jr.ENS_WORKER_CLASS+SPACE(100)  'Workers Class'
+, ph.PHONE 'Work Phone Number'
+, case when ph.PHONE in ('+171391720521', '111')  then 1 else 0 end Flag
+from ENS_EMPLOYEE_INFO_VW e
+join PS_PERSONAL_VW v on e.EMPLID=v.EMPLID
+join PS_JOB_JR jr on e.EMPLID=jr.EMPLID
+join PS_PERSON p on e.EMPLID=p.EMPLID
+join PS_JOB j on e.EMPLID=j.EMPLID-- and j.EFFDT=MAX(
+join PS_SET_CNTRL_REC r on j.REG_REGION=r.SETCNTRLVALUE and r.RECNAME='EMPL_CLASS_TBL' 
+join PS_EMPL_CLASS_TBL c on j.EMPL_CLASS=c.EMPL_CLASS and c.EFFDT<=j.EFFDT and r.SETID=c.SETID
+left join PS_PERS_NID i on e.EMPLID=i.EMPLID AND i.COUNTRY='USA' and i.NATIONAL_ID_TYPE in ('PR', 'NID')
+left join PS_PERSONAL_PHONE ph on e.EMPLID=ph.EMPLID and PHONE_TYPE='BUSN'
+join XLATTABLE_VW x on j.EMPL_STATUS=x.EFF_STATUS and FIELDNAME  ='EMPL_STATUS'
+where e.EMPLID='011311'-- or  ph.PHONE in ('+171391720521', '111') 
+order by j.EFFDT desc, jr.EFFDT desc
+--, EFFSEQ
+, c.EFFDT desc
+)
+
+select * into #t from t
+update t set [Employee Status]=XLATLONGNAME from #t t join XLATTABLE_VW x on [Employee Status]=x.FIELDVALUE and FIELDNAME  ='EMPL_STATUS'
+update t set [Ensco BU]=XLATLONGNAME from #t t join XLATTABLE_VW x on [Ensco BU]=x.FIELDVALUE and FIELDNAME  ='ENS_BUS_UNIT'
+update t set [Employee Type]=XLATLONGNAME from #t t join XLATTABLE_VW x on [Employee Type]=x.FIELDVALUE and FIELDNAME  ='PER_ORG'
+update t set [Workers Class]=XLATLONGNAME from #t t join XLATTABLE_VW x on [Workers Class]=x.FIELDVALUE and FIELDNAME  ='ENS_WORKER_CLASS'
+
+alter table #t drop column flag
+SELECT  * from #t
+--select top 11 ENS_BUS_UNIT, *  from PS_JOB_JR where EMPLID='011311'
+

@@ -1,0 +1,39 @@
+﻿body 
+{
+	  background-color:White;
+	  font-size: 6px;
+	  font-family: Arial;
+	  MARGIN-TOP: 0px; PADDING-TOP: 0px; 
+}
+.gridview
+ 
+{
+ 
+      position : absolute;
+ 
+      top : 5px;
+ 
+      left : 115px;
+ 
+
+}
+span
+{
+    	  font-size: 6px;
+
+
+}
+.landscape
+ { 
+ width: 100%; 
+ height: 100%; 
+ margin: 0% 0% 0% 0%; 
+ filter: progid:DXImageTransform.Microsoft.BasicImage(Rotation=3);
+ }
+ .portrait
+ { 
+ width: 100%; 
+ height: 100%; 
+ margin: 0% 0% 0% 0%; 
+
+ }  

@@ -1,0 +1,197 @@
+﻿
+<head>
+    <style>
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+        div1 {
+            border-style: solid;
+            border-width: 4px;
+            border-color: rgb(0, 70, 127);
+            width: 90%;
+        }
+    </style>
+    <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="wi.js"></script>
+</head>
+<body style1='display:none'>
+  
+        <center1>
+            <br />
+            <div>
+                <br />
+                <table id=t border1="1" width="100%" style="border-collapse:collapse;" cellpadding="4">
+                    <tr>
+                        <td style="font-weight:bolder" id="Label">                        
+                    <tr>
+                        <td>
+                            <input type="text" id="SearchText"  />
+                            <input type="button" onclick="on_Search()" value="Search" />
+                    <tr>
+                        <td>
+                            <input type="button" onclick="on_Save()" value="Save" />
+                            <input type="button" onclick=" window.close()" value="Cancel" />
+                </table>
+                <table  align1="left" id=t0 border1="1" width="50%"></table>
+                <br />
+                <table  align1="left" id=t1 border1="1" width="50%"></table>
+                <br /><br />
+            </div>
+        </center1>
+
+</body>
+</html>
+<script>
+    var theForm = document.forms['form1']
+    var t = $('#t')
+    var t0 = $('#t0')
+    var t1 = $('#t1')
+    var Name
+    $(document).ready(function () {
+        //return
+        Name = getParameterByName('name')
+        var xml = window.dialogArguments
+        xml = '<r>' + xml + '</r>'
+        $($.parseXML(xml)).find('r').each(function (index, element) {
+            $(this).children().each(function () {
+                var src = $(this)
+                var s = '<tr><td ><input checked type=checkbox id=' + src.attr('id') + ' />' + src.attr('name') + ''
+                if (src.attr('name') == 'Other') 
+                    s += ': <input type=text  />'
+                s+='</td>'
+                if (Name == 'resources')
+                    s += '<td align=right><input type=text  onkeyup="return on_Keyup(this)" style="width:30px" value=' + src.attr('number') + ' />'
+                if (t1.find('tr').length == 0 && Name == 'resources')
+                    $('<tr><td><b>Role</b></td><td align=right><b>#&nbsp&nbsp</b></td></tr>').appendTo(t1)
+                var tr=$(s).appendTo(t1)
+                if (src.attr('name') == 'Other') 
+                    tr.find('input:text').eq(0).val(src.attr('other'))
+            })
+        });
+
+
+       Init()
+    })
+    function Init() {
+        var title
+        var label
+        switch (Name) {
+            case "resources":
+                title = "Minimum Personnel Required";
+                label = 'Select all applicable roles and specify minimum number required:'
+                break;
+            case "personalprotectiveequipment":
+                title = "Personal Protective Equipment";
+                label = 'Select all required job-specific PPE:'
+                break;
+            case "tool":
+                title = "Equipment/Tools  ";
+                label = 'Select all tools and equipment needed to perform this job:'
+                break;
+        }
+        $(document).prop('title', title + $(document).prop('title'))
+        $('#SearchText').on('keypress', function (e) {
+            var code = e.keyCode || e.which;
+            if (code == 13) { 
+                on_Search()
+            }
+        });
+        $('#Label').html(label)
+    }
+    function on_Keyup(src0) {
+        var src = $(src0)
+        if (/\D/g.test(src.val())) {
+            // Filter non-digits from input value.
+            src.val(src.val().replace(/\D/g, ''))
+        }
+    }
+    function on_Cancel() {
+        window.close()
+        return
+    }
+    function on_Search() {
+        var where = GetWhere()
+        var sql = 'select * from ' + Name + where + " order by case when name='Other' then 'zzz' else name end "
+        CallAjax('sql', sql, 'runSql', function (xml) {
+            //alert(xml.d)
+            t0.html('')
+            $($.parseXML(xml.d)).find('Table').each(function (index, element) {
+                var field = $(element)
+                var name = field.find('Name').text()
+                var id = field.find('id').text()
+                if ($('#' + id).length != 0)
+                    return
+                var s = '<tr><td ><input  type=checkbox id=' + id + ' />' + name 
+                if (name == 'Other')
+                    s += ': <input type=text />'
+                s+='</td>'
+                if (Name == 'resources')
+                    s += '<td  align=right><input type=text onkeyup="return on_Keyup(this)" style="width:30px"/>'
+                if (t0.find('tr').length == 0 && Name == 'resources')
+                    $('<tr><td><b>Role</b></td><td align=right><b>#&nbsp&nbsp</b></td></tr>').appendTo(t0)
+                $(s).appendTo(t0)
+            });
+        },
+        function (e) {
+            alert(e.responseText)
+            alert(sql)
+        }
+       )
+    }
+    function GetWhere() {
+        var where = "  where 1=1 and isnull(disabled, 0)=0  ";
+        var text = $.trim($('#SearchText').val())
+        if (text != '')
+            where += " and name like '%" + text + "%' ";
+        return (where)
+    }
+    function on_Save() {
+        var arr = [];
+        var validate = true
+        $('input[type=checkbox]:checked').each(function (index) {
+            var src = $(this)
+            var td = src.parent()
+            var id = src.attr('id')
+            var name = td.text()
+            var other, number
+            if (name.indexOf('Other') != -1)
+                name='Other'
+            if (name == 'Other') {
+                other = td.children('input:text').eq(0).val()
+                other = $.trim(other)
+                if (other == '') {
+                    alert('Please enter text for Other.')
+                    validate = false
+                    return
+                }
+            }
+            if (Name == 'resources') {
+                number = td.next().find('input:text').eq(0).val()
+                if (isNaN(number) || number < 1 || number > 10) {
+                    alert('Please enter a positive number(max 10).')
+                    validate = false
+                    return
+                }
+            }
+            arr.push({ id: id, name: name, number: number, other: other });
+            arr.sort(function (a, b) {
+                if (b.name == 'Other')
+                    return -1
+                if (a.name == 'Other')
+                    return 1
+                if (a.name < b.name)
+                    return -1
+                if (a.name > b.name)
+                    return 1
+                if (a.name == b.name)
+                    return 0
+            })
+        })
+        if (!validate)
+            return
+        window.returnValue = arr;
+        window.close();
+        return
+    }
+</script>
